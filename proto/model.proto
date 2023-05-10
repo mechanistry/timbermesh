@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package protoblog;
+
+enum ScalarType {
+	SCALAR_TYPE_UNSPECIFIED = 0;
+	SCALAR_TYPE_UNSIGNED_BYTE = 1;
+	SCALAR_TYPE_UNSIGNED_INT = 2;
+	SCALAR_TYPE_INT = 3;
+	SCALAR_TYPE_FLOAT = 4;
+	SCALAR_TYPE_DOUBLE = 5;
+}
+
+message Model {
+	int32 version = 1;
+	string name = 2;
+	repeated Node nodes = 3;
+}
+
+message Node {
+	int32 parent = 1;
+    string name = 2;
+	Vector3Float position = 3;
+	QuaternionFloat rotation = 4;
+	Vector3Float scale = 5;
+	int32 vertexCount = 6;
+	repeated VertexProperty vertexProperties = 7;
+	repeated Mesh meshes = 8;
+	repeated VertexAnimation vertexAnimations = 9;
+	repeated NodeAnimation nodeAnimations = 10;
+}
+
+message Mesh {
+	repeated int32 indices = 1;
+	string material = 2;
+}
+
+message VertexAnimation {
+	string name = 1;
+	float framerate = 2;
+	int32 animatedVertexCount = 3;
+	repeated VertexAnimationFrame frames = 4;
+}
+
+message VertexAnimationFrame {
+	repeated VertexProperty vertexProperties = 1;
+}
+
+message NodeAnimation {
+	string name = 1;
+	float framerate = 2;
+	repeated NodeAnimationFrame frames = 3;
+}
+
+message NodeAnimationFrame {
+	Vector3Float position = 1;
+	QuaternionFloat rotation = 2;
+	Vector3Float scale = 3;
+}
+
+message VertexProperty {
+	string name = 1;
+	ScalarType scalarType = 2;
+	int32 scalarTypeDimension = 3;
+	bytes data = 4;
+}
+
+message Vector3Float {
+	float x = 1;
+	float y = 2;
+	float z = 3;
+}
+
+message QuaternionFloat {
+	float x = 1;
+	float y = 2;
+	float z = 3;
+	float w = 4;
+}
