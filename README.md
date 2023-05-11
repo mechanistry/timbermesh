@@ -4,8 +4,8 @@ Meshy is an open-source 3D file format that allows to store geometry (mesh) info
 
 ### Specificaiton
 
-Detailed specification of Meshy file format can be found here:\
-[https://github.com/mechanistry/meshy/wiki/Meshy-format-specification](https://github.com/mechanistry/meshy/wiki/Meshy-format-specification)
+Overview of Meshy file format can be found here:\
+[https://github.com/mechanistry/meshy/wiki/Meshy-overview](https://github.com/mechanistry/meshy/wiki/Meshy-overview)
 
 ### Plugins
 
