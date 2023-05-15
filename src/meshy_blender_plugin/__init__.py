@@ -1,10 +1,11 @@
 bl_info = {
-    "name": "Meshy Model Exporter",
+    "name": "Meshy Blender Plugin",
     "description": "Exporting models as Meshy file",
-    "author": "Mechanistry",
+    "author": "Mechanistry sp. z o.o.",
+    "version": (1, 0, 0),
     "blender": (2, 80, 0),
     "category": "Import-Export",
-    "version": (1, 0, 0),
+    "doc_url": "https://github.com/mechanistry/meshy/wiki/Meshy-Blender-Plugin-manual"
 }
 
 import bpy
