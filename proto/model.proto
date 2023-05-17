@@ -19,7 +19,7 @@ message Model {
 
 message Node {
 	int32 parent = 1;
-    string name = 2;
+	string name = 2;
 	Vector3Float position = 3;
 	QuaternionFloat rotation = 4;
 	Vector3Float scale = 5;
