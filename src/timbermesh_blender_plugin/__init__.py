@@ -1,11 +1,11 @@
 bl_info = {
-    "name": "Meshy Blender Plugin",
-    "description": "Exporting models as Meshy file",
+    "name": "Timbermesh Blender Plugin",
+    "description": "Exporting models as Timbermesh file",
     "author": "Mechanistry sp. z o.o.",
-    "version": (1, 0, 0),
+    "version": (1, 1, 0),
     "blender": (2, 80, 0),
     "category": "Import-Export",
-    "doc_url": "https://github.com/mechanistry/meshy/wiki/Meshy-Blender-Plugin-manual"
+    "doc_url": "https://github.com/mechanistry/timbermesh/wiki/Timbermesh-Blender-Plugin-manual"
 }
 
 import bpy
@@ -15,22 +15,22 @@ from os.path import dirname
 sys.path.append(dirname(__file__))
 from bpy.types import Operator
 from bpy_extras.io_utils import ExportHelper, path_reference_mode
-from meshy_blender_plugin import meshy_exporter
-from meshy_blender_plugin import blender_utils
+from timbermesh_blender_plugin import timbermesh_exporter
+from timbermesh_blender_plugin import blender_utils
 
 
 class ExportCollection(Operator, ExportHelper):
-    bl_idname = "export_collection.meshy"
+    bl_idname = "export_collection.timbermesh"
     bl_label = "Export Collection"
     bl_options = {'PRESET'}
 
-    filename_ext = ".meshy"
+    filename_ext = ".timbermesh"
     use_filter_folder = False
     check_extension = True
     path_mode: path_reference_mode
 
     filter_glob: bpy.props.StringProperty(
-        default="*.meshy;",
+        default="*.timbermesh;",
         options={'HIDDEN'},
     )
 
@@ -54,16 +54,16 @@ class ExportCollection(Operator, ExportHelper):
 
     def execute(self, context):
         selected_collections = blender_utils.get_selected_collections(context)
-        settings = meshy_exporter.ExportSettings(context,
+        settings = timbermesh_exporter.ExportSettings(context,
                                                  self.merge_meshes,
                                                  self.single_animation,
                                                  self.use_vertex_animations)
-        meshy_exporter.Exporter.export_collection(selected_collections[0], self.filepath, settings)
+        timbermesh_exporter.Exporter.export_collection(selected_collections[0], self.filepath, settings)
         return {'FINISHED'}
 
 
 class ExportCollections(Operator, ExportHelper):
-    bl_idname = "export_collections.meshy"
+    bl_idname = "export_collections.timbermesh"
     bl_label = "Export Collections"
     bl_options = {'PRESET'}
     filename_ext = "."
@@ -110,35 +110,35 @@ class ExportCollections(Operator, ExportHelper):
         return {'RUNNING_MODAL'}
 
     def execute(self, context):
-        settings = meshy_exporter.ExportSettings(context,
-                                                 self.merge_meshes,
-                                                 self.single_animation,
-                                                 self.use_vertex_animations)
+        settings = timbermesh_exporter.ExportSettings(context,
+                                                      self.merge_meshes,
+                                                      self.single_animation,
+                                                      self.use_vertex_animations)
 
         selected_collections = blender_utils.get_selected_collections(context)
         for collection in selected_collections:
-            path = self.directory + "/" + collection.name + ".meshy"
+            path = self.directory + "/" + collection.name + ".timbermesh"
             if self.append_model_to_name:
-                path = path.replace(".meshy", ".Model.meshy")
-            meshy_exporter.Exporter.export_collection(collection, path, settings)
+                path = path.replace(".timbermesh", ".Model.timbermesh")
+            timbermesh_exporter.Exporter.export_collection(collection, path, settings)
         return {'FINISHED'}
 
 
 class ExportCollectionMenu(bpy.types.Operator):
-    bl_idname = "export_collection_menu.meshy"
+    bl_idname = "export_collection_menu.timbermesh"
     bl_label = "Export Collection"
 
     def execute(self, context):
-        bpy.ops.export_collection.meshy('INVOKE_DEFAULT')
+        bpy.ops.export_collection.timbermesh('INVOKE_DEFAULT')
         return {'FINISHED'}
 
 
 class ExportCollectionsMenu(bpy.types.Operator):
-    bl_idname = "export_collections_menu.meshy"
+    bl_idname = "export_collections_menu.timbermesh"
     bl_label = "Export Collections"
 
     def execute(self, context):
-        bpy.ops.export_collections.meshy('INVOKE_DEFAULT')
+        bpy.ops.export_collections.timbermesh('INVOKE_DEFAULT')
         return {'FINISHED'}
 
 
@@ -147,9 +147,9 @@ def draw_menu(self, context):
     layout.separator()
     selected_collections = blender_utils.get_selected_collections(context)
     if len(selected_collections) > 1:
-        layout.operator(ExportCollectionsMenu.bl_idname, text="Batch Export (*.meshy)")
+        layout.operator(ExportCollectionsMenu.bl_idname, text="Batch Export (*.timbermesh)")
     else:
-        layout.operator(ExportCollectionMenu.bl_idname, text="Export (*.meshy)")
+        layout.operator(ExportCollectionMenu.bl_idname, text="Export (*.timbermesh)")
 
 
 def register():

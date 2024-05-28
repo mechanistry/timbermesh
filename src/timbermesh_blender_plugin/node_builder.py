@@ -49,7 +49,7 @@ class Node:
         self.parent = None
         self.hierarchy_node = None
         self.mesh_objects = []
-        self.meshy_node = None
+        self.timbermesh_node = None
         self.meshes = []
         self.vertices = []
         self.original_object_meshes = {}
@@ -63,10 +63,10 @@ class Node:
 class NodeBuilder:
 
     @classmethod
-    def create_nodes(cls, root_hierarchy_node, context, meshy_model) -> list:
+    def create_nodes(cls, root_hierarchy_node, context, timbermesh_model) -> list:
         nodes = []
         cls.__create_node(context, root_hierarchy_node, nodes)
-        cls.__save_nodes(nodes, meshy_model)
+        cls.__save_nodes(nodes, timbermesh_model)
         return nodes
 
     @classmethod
@@ -203,42 +203,42 @@ class NodeBuilder:
         return has_colors, has_uv0, has_uv1, has_uv2
 
     @classmethod
-    def __save_nodes(cls, nodes, meshy_model) -> None:
+    def __save_nodes(cls, nodes, timbermesh_model) -> None:
         for node in nodes:
-            meshy_node = meshy_model.nodes.add()
-            meshy_node.name = node.name
-            meshy_node.parent = nodes.index(node.parent) if node.parent is not None else -1
-            node.meshy_node = meshy_node
+            timbermesh_node = timbermesh_model.nodes.add()
+            timbermesh_node.name = node.name
+            timbermesh_node.parent = nodes.index(node.parent) if node.parent is not None else -1
+            node.timbermesh_node = timbermesh_node
 
             source_object = node.hierarchy_node.source_object
             object_transform_matrix = mathutils.Matrix.Identity(4)
             if node.hierarchy_node.source_object is not None:
                 object_transform_matrix = blender_utils.get_local_matrix(source_object)
-            cls.__save_node_transform(meshy_node, object_transform_matrix)
-            cls.__save_node_vertex_properties(meshy_node, node)
-            cls.__save_node_meshes(meshy_node, node)
+            cls.__save_node_transform(timbermesh_node, object_transform_matrix)
+            cls.__save_node_vertex_properties(timbermesh_node, node)
+            cls.__save_node_meshes(timbermesh_node, node)
 
     @classmethod
-    def __save_node_transform(cls, meshy_node, matrix) -> None:
+    def __save_node_transform(cls, timbermesh_node, matrix) -> None:
         position = matrix.to_translation()
         rotation = matrix.to_quaternion()
         scale = matrix.to_scale()
 
-        meshy_node.position.x = -position.x
-        meshy_node.position.y = position.z
-        meshy_node.position.z = -position.y
+        timbermesh_node.position.x = -position.x
+        timbermesh_node.position.y = position.z
+        timbermesh_node.position.z = -position.y
 
-        meshy_node.rotation.x = rotation.x
-        meshy_node.rotation.y = -rotation.z
-        meshy_node.rotation.z = rotation.y
-        meshy_node.rotation.w = rotation.w
+        timbermesh_node.rotation.x = rotation.x
+        timbermesh_node.rotation.y = -rotation.z
+        timbermesh_node.rotation.z = rotation.y
+        timbermesh_node.rotation.w = rotation.w
 
-        meshy_node.scale.x = scale.x
-        meshy_node.scale.y = scale.z
-        meshy_node.scale.z = scale.y
+        timbermesh_node.scale.x = scale.x
+        timbermesh_node.scale.y = scale.z
+        timbermesh_node.scale.z = scale.y
 
     @classmethod
-    def __save_node_vertex_properties(cls, meshy_node, node) -> None:
+    def __save_node_vertex_properties(cls, timbermesh_node, node) -> None:
         sorted_vertices = sorted(node.vertices, key=lambda v: v.index)
         positions = []
         normals = []
@@ -263,24 +263,24 @@ class NodeBuilder:
             if node.has_uv2:
                 uv2.append(mathutils.Vector((vertex.uv2.x, vertex.uv2.y)))
 
-        meshy_node.vertexCount = len(sorted_vertices)
-        meshy_node.vertexProperties.append(vertex_properties_utils.create_vector3(positions, "position"))
-        meshy_node.vertexProperties.append(vertex_properties_utils.create_vector3(normals, "normal"))
-        meshy_node.vertexProperties.append(vertex_properties_utils.create_vector4(tangents, "tangent"))
+        timbermesh_node.vertexCount = len(sorted_vertices)
+        timbermesh_node.vertexProperties.append(vertex_properties_utils.create_vector3(positions, "position"))
+        timbermesh_node.vertexProperties.append(vertex_properties_utils.create_vector3(normals, "normal"))
+        timbermesh_node.vertexProperties.append(vertex_properties_utils.create_vector4(tangents, "tangent"))
 
         if node.has_colors:
-            meshy_node.vertexProperties.append(vertex_properties_utils.create_vector4(colors, "color"))
+            timbermesh_node.vertexProperties.append(vertex_properties_utils.create_vector4(colors, "color"))
         if node.has_uv0:
-            meshy_node.vertexProperties.append(vertex_properties_utils.create_vector2(uv0, "uv0"))
+            timbermesh_node.vertexProperties.append(vertex_properties_utils.create_vector2(uv0, "uv0"))
         if node.has_uv1:
-            meshy_node.vertexProperties.append(vertex_properties_utils.create_vector2(uv1, "uv1"))
+            timbermesh_node.vertexProperties.append(vertex_properties_utils.create_vector2(uv1, "uv1"))
         if node.has_uv2:
-            meshy_node.vertexProperties.append(vertex_properties_utils.create_vector2(uv2, "uv2"))
+            timbermesh_node.vertexProperties.append(vertex_properties_utils.create_vector2(uv2, "uv2"))
 
     @classmethod
-    def __save_node_meshes(cls, meshy_node, node) -> None:
+    def __save_node_meshes(cls, timbermesh_node, node) -> None:
         for mesh in node.meshes:
-            meshy_mesh = meshy_node.meshes.add()
-            meshy_mesh.material = mesh.material
+            timbermesh_mesh = timbermesh_node.meshes.add()
+            timbermesh_mesh.material = mesh.material
             for index in mesh.indices:
-                meshy_mesh.indices.append(index)
+                timbermesh_mesh.indices.append(index)

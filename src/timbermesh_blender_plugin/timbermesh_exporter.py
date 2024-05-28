@@ -25,10 +25,10 @@ class Exporter:
         settings.context.scene.frame_set(0)
         objects_to_export = exporter_utils.get_exportable_objects(collection.all_objects)
         root_hierarchy_node = Hierarchy.create(objects_to_export, collection.name, settings.merge_meshes)
-        meshy_model = cls.__create_model(root_hierarchy_node, settings)
+        timbermesh_model = cls.__create_model(root_hierarchy_node, settings)
 
         with open(path, "wb") as file:
-            serialized_model = meshy_model.SerializeToString()
+            serialized_model = timbermesh_model.SerializeToString()
             file.write(zlib.compress(serialized_model))
 
         end_time = time.time()
@@ -36,10 +36,10 @@ class Exporter:
 
     @classmethod
     def __create_model(cls, hierarchy_node, settings) -> model_pb2.Model:
-        meshy_model = model_pb2.Model()
-        nodes = NodeBuilder.create_nodes(hierarchy_node, settings.context, meshy_model)
+        timbermesh_model = model_pb2.Model()
+        nodes = NodeBuilder.create_nodes(hierarchy_node, settings.context, timbermesh_model)
         cls.__create_animation(nodes, settings)
-        return meshy_model
+        return timbermesh_model
 
     @classmethod
     def __create_animation(cls, nodes, settings):

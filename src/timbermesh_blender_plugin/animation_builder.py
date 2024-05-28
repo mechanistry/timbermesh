@@ -43,13 +43,13 @@ class AnimationBuilder:
                 continue
 
             if settings.use_vertex_animations and animation_utils.can_use_vertex_animations(node):
-                vertex_animation = node.meshy_node.vertexAnimations.add()
+                vertex_animation = node.timbermesh_node.vertexAnimations.add()
                 vertex_animation.name = action.name
                 vertex_animation.framerate = context.scene.render.fps
                 vertex_animation.animatedVertexCount = node.animated_vertex_count
                 vertex_animations[node] = vertex_animation
             elif animation_utils.can_use_node_animations(node):
-                node_animation = node.meshy_node.nodeAnimations.add()
+                node_animation = node.timbermesh_node.nodeAnimations.add()
                 node_animation.name = action.name
                 node_animation.framerate = context.scene.render.fps
                 node_animations[node] = node_animation
