@@ -32,7 +32,8 @@ def create_mesh(obj, matrix) -> bpy.types.Mesh:
 
 
 def remove_mesh(mesh) -> None:
-    mesh.free_normals_split()
+    if bpy.app.version < (4, 0, 0):
+        mesh.free_normals_split()
     mesh.free_tangents()
     mesh.clear_geometry()
     bpy.data.meshes.remove(mesh)

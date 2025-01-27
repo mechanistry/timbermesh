@@ -2,7 +2,7 @@ bl_info = {
     "name": "Timbermesh Blender Plugin",
     "description": "Exporting models as Timbermesh file",
     "author": "Mechanistry sp. z o.o.",
-    "version": (1, 1, 0),
+    "version": (1, 2, 0),
     "blender": (2, 80, 0),
     "category": "Import-Export",
     "doc_url": "https://github.com/mechanistry/timbermesh/wiki/Timbermesh-Blender-Plugin-manual"
@@ -52,12 +52,20 @@ class ExportCollection(Operator, ExportHelper):
         default=False
     )
 
+    def invoke(self, context, event):
+        selected_collections = blender_utils.get_selected_collections(context)
+        if len(selected_collections) > 0:
+            self.filepath = bpy.path.ensure_ext(selected_collections[0].name, self.filename_ext)
+        context.window_manager.fileselect_add(self)
+        return {'RUNNING_MODAL'}
+
     def execute(self, context):
         selected_collections = blender_utils.get_selected_collections(context)
         settings = timbermesh_exporter.ExportSettings(context,
-                                                 self.merge_meshes,
-                                                 self.single_animation,
-                                                 self.use_vertex_animations)
+                                                      self.merge_meshes,
+                                                      self.single_animation,
+                                                      self.use_vertex_animations)
+
         timbermesh_exporter.Exporter.export_collection(selected_collections[0], self.filepath, settings)
         return {'FINISHED'}
 
