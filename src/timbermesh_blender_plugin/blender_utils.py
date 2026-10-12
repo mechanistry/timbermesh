@@ -67,18 +67,27 @@ def get_local_matrix(obj) -> mathutils.Matrix:
 
 def get_used_materials(objects) -> List[str]:
     materials = []
+    depsgraph = bpy.context.evaluated_depsgraph_get()
     for obj in objects:
         if obj.type == blender_types.MESH:
-            if len(obj.material_slots) > 0:
-                for polygon in obj.data.polygons:
-                    material_slot = obj.material_slots[polygon.material_index]
-                    material = material_slot.material
-                    if material.name not in materials:
-                        materials.append(material.name)
+            evaluated_obj = obj.evaluated_get(depsgraph)
+            if len(evaluated_obj.material_slots) > 0:
+                for polygon in evaluated_obj.data.polygons:
+                    material_name = get_material_name(evaluated_obj, polygon.material_index)
+                    if material_name not in materials:
+                        materials.append(material_name)
             elif "" not in materials:
                 materials.append("")
 
     return materials
+
+
+def get_material_name(obj, material_index) -> str:
+    if 0 <= material_index < len(obj.material_slots):
+        material = obj.material_slots[material_index].material
+        if material is not None:
+            return material.name
+    return ""
 
 
 def get_current_scene_animations(context) -> tuple[dict[Any, Any], Any]:

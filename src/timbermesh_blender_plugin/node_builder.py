@@ -132,7 +132,7 @@ class NodeBuilder:
                 triangle_list = list(triangles)
 
                 if len(obj.material_slots) > 0:
-                    material_name = obj.material_slots[material_index].material.name
+                    material_name = material_name = blender_utils.get_material_name(obj, material_index)
                 else:
                     material_name = ""
                 mesh = next((m for m in node.meshes if m.material == material_name), None)
