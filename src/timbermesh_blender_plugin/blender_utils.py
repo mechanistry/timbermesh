@@ -84,7 +84,7 @@ def get_used_materials(objects) -> List[str]:
 def get_current_scene_animations(context) -> tuple[dict[Any, Any], Any]:
     animations = {}
     for obj in context.selectable_objects:
-        if obj.type == blender_types.ARMATURE:
+        if obj.type == blender_types.ARMATURE and obj.animation_data is not None:
             animations[obj.name] = obj.animation_data.action
 
     return animations, context.scene.frame_current
@@ -92,8 +92,11 @@ def get_current_scene_animations(context) -> tuple[dict[Any, Any], Any]:
 
 def restore_scene_animations(context, animations, current_frame) -> None:
     for obj in context.selectable_objects:
-        if obj.type == blender_types.ARMATURE:
-            obj.animation_data.action = animations[obj.name]
+        if obj.type != blender_types.ARMATURE or obj.animation_data is None:
+            continue
+        if obj.name not in animations:
+            continue
+        obj.animation_data.action = animations[obj.name]
 
     context.scene.frame_set(current_frame)
 
