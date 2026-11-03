@@ -28,7 +28,7 @@ class AnimationBuilder:
     @classmethod
     def __set_action_to_all_armatures(cls, action, settings) -> None:
         for obj in settings.context.selectable_objects:
-            if obj.type == blender_types.ARMATURE:
+            if obj.type == blender_types.ARMATURE and obj.animation_data is not None:
                 obj.animation_data.action = action
 
     @classmethod
