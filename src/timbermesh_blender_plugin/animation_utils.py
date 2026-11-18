@@ -1,5 +1,5 @@
-﻿import exporter_utils
-import blender_types
+﻿from . import exporter_utils
+from . import blender_types
 
 
 def can_use_vertex_animations(node) -> bool:

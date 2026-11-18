@@ -1,5 +1,5 @@
-import exporter_utils
-import blender_utils
+from . import exporter_utils
+from . import blender_utils
 import mathutils
 
 

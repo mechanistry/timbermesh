@@ -1,5 +1,5 @@
 import struct
-import model_pb2
+from . import model_pb2
 
 
 def pack_vector2f_array(source_array, target_bytearray) -> None:

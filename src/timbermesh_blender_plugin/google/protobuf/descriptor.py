@@ -37,7 +37,7 @@ __author__ = 'robinson@google.com (Will Robinson)'
 import threading
 import warnings
 
-from google.protobuf.internal import api_implementation
+from .internal import api_implementation
 
 _USE_C_DESCRIPTORS = False
 if api_implementation.Type() != 'python':
@@ -48,7 +48,7 @@ if api_implementation.Type() != 'python':
   _message = api_implementation._c_module
   # TODO(jieluo): Remove this import after fix api_implementation
   if _message is None:
-    from google.protobuf.pyext import _message
+    from .pyext import _message
   _USE_C_DESCRIPTORS = True
 
 
@@ -167,7 +167,7 @@ class DescriptorBase(metaclass=DescriptorMetaclass):
     if self._options:
       return self._options
 
-    from google.protobuf import descriptor_pb2
+    from . import descriptor_pb2
     try:
       options_class = getattr(descriptor_pb2,
                               self._options_class_name)
@@ -969,7 +969,7 @@ class MethodDescriptor(DescriptorBase):
         arguments.
     """
     if self.containing_service is not None:
-      from google.protobuf import descriptor_pb2
+      from . import descriptor_pb2
       service_proto = descriptor_pb2.ServiceDescriptorProto()
       self.containing_service.CopyToProto(service_proto)
       proto.CopyFrom(service_proto.method[self.index])
@@ -1041,7 +1041,7 @@ class FileDescriptor(DescriptorBase):
         options, serialized_options, 'FileOptions')
 
     if pool is None:
-      from google.protobuf import descriptor_pool
+      from . import descriptor_pool
       pool = descriptor_pool.Default()
     self.pool = pool
     self.message_types_by_name = {}
@@ -1144,7 +1144,7 @@ def MakeDescriptor(desc_proto, package='', build_file_if_cpp=True,
     # definition in the C++ descriptor pool. To do this, we build a
     # FileDescriptorProto with the same definition as this descriptor and build
     # it into the pool.
-    from google.protobuf import descriptor_pb2
+    from . import descriptor_pb2
     file_descriptor_proto = descriptor_pb2.FileDescriptorProto()
     file_descriptor_proto.message_type.add().MergeFrom(desc_proto)
 

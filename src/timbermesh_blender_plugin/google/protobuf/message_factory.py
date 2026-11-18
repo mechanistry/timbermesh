@@ -39,14 +39,14 @@ my_proto_instance = message_classes['some.proto.package.MessageName']()
 
 __author__ = 'matthewtoia@google.com (Matt Toia)'
 
-from google.protobuf.internal import api_implementation
-from google.protobuf import descriptor_pool
-from google.protobuf import message
+from .internal import api_implementation
+from . import descriptor_pool
+from . import message
 
 if api_implementation.Type() == 'python':
-  from google.protobuf.internal import python_message as message_impl
+  from .internal import python_message as message_impl
 else:
-  from google.protobuf.pyext import cpp_message as message_impl  # pylint: disable=g-import-not-at-top
+  from .pyext import cpp_message as message_impl  # pylint: disable=g-import-not-at-top
 
 
 # The type of all Message classes.

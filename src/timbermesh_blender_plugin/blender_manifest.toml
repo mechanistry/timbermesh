@@ -1,0 +1,35 @@
+schema_version = "1.0.0"
+
+# Blender extension manifest (Blender 4.2+).
+# Keeps the add-on installable through Preferences -> Get Extensions / Install from Disk,
+# in addition to being usable as a legacy add-on.
+
+id = "timbermesh_blender_plugin"
+version = "1.3.0"
+name = "Timbermesh Blender Plugin"
+tagline = "Export collections as Timbermesh model files"
+maintainer = "Mechanistry sp. z o.o. <bartosz.kulesza.pl@gmail.com>"
+type = "add-on"
+
+website = "https://github.com/mechanistry/timbermesh"
+tags = ["Import-Export", "Animation"]
+
+blender_version_min = "4.2.0"
+
+license = [
+  "SPDX:MIT",
+]
+copyright = [
+  "2023 Mechanistry sp. z o.o.",
+]
+
+[permissions]
+files = "Write exported .timbermesh files to disk"
+
+[build]
+paths_exclude_pattern = [
+  "__pycache__/",
+  "/.git/",
+  "/*.zip",
+  "*.pyc",
+]

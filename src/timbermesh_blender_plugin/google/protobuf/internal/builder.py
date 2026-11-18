@@ -37,10 +37,10 @@ in generated code.
 
 __author__ = 'jieluo@google.com (Jie Luo)'
 
-from google.protobuf.internal import enum_type_wrapper
-from google.protobuf import message as _message
-from google.protobuf import reflection as _reflection
-from google.protobuf import symbol_database as _symbol_database
+from . import enum_type_wrapper
+from .. import message as _message
+from .. import reflection as _reflection
+from .. import symbol_database as _symbol_database
 
 _sym_db = _symbol_database.Default()
 
@@ -117,8 +117,8 @@ def BuildServices(file_des, module_name, module):
     module: Generated _pb2 module
   """
   # pylint: disable=g-import-not-at-top
-  from google.protobuf import service as _service
-  from google.protobuf import service_reflection
+  from .. import service as _service
+  from .. import service_reflection
   # pylint: enable=g-import-not-at-top
   for (name, service) in file_des.services_by_name.items():
     module[name] = service_reflection.GeneratedServiceType(

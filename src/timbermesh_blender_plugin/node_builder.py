@@ -1,10 +1,10 @@
 ﻿import mathutils
 import itertools
-import animation_utils
-import blender_utils
-import blender_types
-import vertex_properties_utils
-import exporter_utils
+from . import animation_utils
+from . import blender_utils
+from . import blender_types
+from . import vertex_properties_utils
+from . import exporter_utils
 
 
 class MeshVertex:

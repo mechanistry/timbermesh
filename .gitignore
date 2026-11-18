@@ -47,3 +47,5 @@ __pycache__/
 /Assets/Plugins/Editor.meta
 /Assets/Plugins/Editor/JetBrains/
 /Assets/Plugins/Editor/JetBrains.meta
+# Extension packages built with `blender -c extension build`
+/build/

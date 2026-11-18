@@ -1,5 +1,5 @@
-import blender_utils
-import blender_types
+from . import blender_utils
+from . import blender_types
 
 
 def get_exportable_objects(objects) -> list:

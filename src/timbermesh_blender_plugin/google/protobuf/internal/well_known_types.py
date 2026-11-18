@@ -44,7 +44,7 @@ import calendar
 import collections.abc
 import datetime
 
-from google.protobuf.descriptor import FieldDescriptor
+from ..descriptor import FieldDescriptor
 
 _TIMESTAMPFOMAT = '%Y-%m-%dT%H:%M:%S'
 _NANOS_PER_SECOND = 1000000000
@@ -88,7 +88,9 @@ class Any(object):
     return '/' in self.type_url and self.TypeName() == descriptor.full_name
 
 
-_EPOCH_DATETIME_NAIVE = datetime.datetime.utcfromtimestamp(0)
+# Local patch (Blender 5.x / Python 3.12+): datetime.utcfromtimestamp() and
+# datetime.utcnow() are deprecated, use the equivalent literals/calls instead.
+_EPOCH_DATETIME_NAIVE = datetime.datetime(1970, 1, 1)
 _EPOCH_DATETIME_AWARE = datetime.datetime.fromtimestamp(
     0, tz=datetime.timezone.utc)
 
@@ -192,7 +194,8 @@ class Timestamp(object):
 
   def GetCurrentTime(self):
     """Get the current UTC into Timestamp."""
-    self.FromDatetime(datetime.datetime.utcnow())
+    # Local patch (Blender 5.x / Python 3.12+): datetime.utcnow() is deprecated.
+    self.FromDatetime(datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None))
 
   def ToNanoseconds(self):
     """Converts Timestamp to nanoseconds since epoch."""
