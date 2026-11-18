@@ -34,9 +34,9 @@ from collections import OrderedDict
 import hashlib
 import os
 
-from google.protobuf import descriptor_pb2
-from google.protobuf import descriptor
-from google.protobuf import message_factory
+from . import descriptor_pb2
+from . import descriptor
+from . import message_factory
 
 
 def _GetMessageFromFactory(factory, full_name):

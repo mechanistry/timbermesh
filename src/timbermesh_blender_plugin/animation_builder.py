@@ -1,9 +1,9 @@
-﻿import bpy
+import bpy
 import mathutils
-import animation_utils
-import blender_utils
-import blender_types
-import vertex_properties_utils
+from . import animation_utils
+from . import blender_utils
+from . import blender_types
+from . import vertex_properties_utils
 
 
 class AnimationBuilder:
@@ -29,7 +29,10 @@ class AnimationBuilder:
     def __set_action_to_all_armatures(cls, action, settings) -> None:
         for obj in settings.context.selectable_objects:
             if obj.type == blender_types.ARMATURE:
-                obj.animation_data.action = action
+                # Assigning the action alone is not enough since Blender 4.4: the
+                # slot of that action has to be selected as well, otherwise the
+                # animation of the previously assigned action keeps being evaluated.
+                blender_utils.set_object_action(obj, action)
 
     @classmethod
     def __save_animation(cls, action, nodes, settings) -> None:

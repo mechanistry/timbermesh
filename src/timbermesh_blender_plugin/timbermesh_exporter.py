@@ -1,11 +1,11 @@
 import time
 import zlib
-import model_pb2
-import blender_utils
-import exporter_utils
-from hierarchy import Hierarchy
-from node_builder import NodeBuilder
-from animation_builder import AnimationBuilder
+from . import model_pb2
+from . import blender_utils
+from . import exporter_utils
+from .hierarchy import Hierarchy
+from .node_builder import NodeBuilder
+from .animation_builder import AnimationBuilder
 
 
 class ExportSettings:
@@ -22,14 +22,19 @@ class Exporter:
     def export_collection(cls, collection, path, settings) -> None:
         start_time = time.time()
 
+        # The whole scene is evaluated at frame 0, remember where the user was working.
+        current_frame = settings.context.scene.frame_current
         settings.context.scene.frame_set(0)
-        objects_to_export = exporter_utils.get_exportable_objects(collection.all_objects)
-        root_hierarchy_node = Hierarchy.create(objects_to_export, collection.name, settings.merge_meshes)
-        timbermesh_model = cls.__create_model(root_hierarchy_node, settings)
+        try:
+            objects_to_export = exporter_utils.get_exportable_objects(collection.all_objects)
+            root_hierarchy_node = Hierarchy.create(objects_to_export, collection.name, settings.merge_meshes)
+            timbermesh_model = cls.__create_model(root_hierarchy_node, settings)
 
-        with open(path, "wb") as file:
-            serialized_model = timbermesh_model.SerializeToString()
-            file.write(zlib.compress(serialized_model))
+            with open(path, "wb") as file:
+                serialized_model = timbermesh_model.SerializeToString()
+                file.write(zlib.compress(serialized_model))
+        finally:
+            settings.context.scene.frame_set(current_frame)
 
         end_time = time.time()
         print("Export finished in", '{0:.2f}'.format(end_time - start_time), "seconds")
@@ -43,8 +48,8 @@ class Exporter:
 
     @classmethod
     def __create_animation(cls, nodes, settings):
-        animations, current_frame = blender_utils.get_current_scene_animations(settings.context)
+        animations = blender_utils.get_current_scene_animations(settings.context)
         try:
             AnimationBuilder.create_animations(nodes, settings)
         finally:
-            blender_utils.restore_scene_animations(settings.context, animations, current_frame)
+            blender_utils.restore_scene_animations(settings.context, animations)

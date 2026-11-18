@@ -9,5 +9,7 @@ Overview of the Timbermesh file format can be found here:\
 ### Plugins
 
 There's a Blender plugin that allows to export models to Timbermesh format. \
+It requires Blender 4.2 or newer and is tested against Blender 5.2 LTS. It can be installed either
+as an extension (Install from Disk with the release zip) or as a legacy add-on in a script directory. \
 Latest release can be found here: [https://github.com/mechanistry/timbermesh/releases](https://github.com/mechanistry/timbermesh/releases) \
 Plugin manual is available here: [https://github.com/mechanistry/timbermesh/wiki/Timbermesh-Blender-Plugin-manual](https://github.com/mechanistry/timbermesh/wiki/Timbermesh-Blender-Plugin-manual)

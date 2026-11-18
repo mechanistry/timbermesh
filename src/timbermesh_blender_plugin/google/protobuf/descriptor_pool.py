@@ -60,9 +60,9 @@ __author__ = 'matthewtoia@google.com (Matt Toia)'
 import collections
 import warnings
 
-from google.protobuf import descriptor
-from google.protobuf import descriptor_database
-from google.protobuf import text_encoding
+from . import descriptor
+from . import descriptor_database
+from . import text_encoding
 
 
 _USE_C_DESCRIPTORS = descriptor._USE_C_DESCRIPTORS  # pylint: disable=protected-access
@@ -213,7 +213,7 @@ class DescriptorPool(object):
     """
 
     # pylint: disable=g-import-not-at-top
-    from google.protobuf import descriptor_pb2
+    from . import descriptor_pb2
     file_desc_proto = descriptor_pb2.FileDescriptorProto.FromString(
         serialized_file_desc_proto)
     file_desc = self._ConvertFileProtoToFileDescriptor(file_desc_proto)

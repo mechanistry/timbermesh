@@ -50,7 +50,7 @@ def _ApiVersionToImplementationType(api_version):
 _implementation_type = None
 try:
   # pylint: disable=g-import-not-at-top
-  from google.protobuf.internal import _api_implementation
+  from . import _api_implementation
   # The compile-time constants in the _api_implementation module can be used to
   # switch to a certain implementation of the Python API at build time.
   _implementation_type = _ApiVersionToImplementationType(
@@ -71,12 +71,15 @@ def _CanImport(mod_name):
 
 
 if _implementation_type is None:
-  if _CanImport('google._upb._message'):
-    _implementation_type = 'upb'
-  elif _CanImport('google.protobuf.pyext._message'):
-    _implementation_type = 'cpp'
-  else:
-    _implementation_type = 'python'
+  # Local patch (Timbermesh plugin): this is a vendored, pure Python copy of
+  # protobuf that is imported as a private sub-package of the plugin. The
+  # original code probes the absolute names 'google._upb._message' and
+  # 'google.protobuf.pyext._message', which inside an embedded interpreter may
+  # resolve to a *different* protobuf installation (for instance another
+  # add-on's). A compiled accelerator from that installation could never be
+  # used by this copy, and picking 'upb'/'cpp' would only break at first use,
+  # so always select the pure Python implementation.
+  _implementation_type = 'python'
 
 
 # This environment variable can be used to switch to a certain implementation
@@ -101,7 +104,7 @@ _c_module = None
 if _implementation_type == 'cpp':
   try:
     # pylint: disable=g-import-not-at-top
-    from google.protobuf.pyext import _message
+    from ..pyext import _message
     _c_module = _message
     del _message
   except ImportError:
@@ -113,7 +116,7 @@ if _implementation_type == 'cpp':
 if _implementation_type == 'upb':
   try:
     # pylint: disable=g-import-not-at-top
-    from google._upb import _message
+    from ..._upb import _message
     _c_module = _message
     del _message
   except ImportError:
@@ -137,7 +140,7 @@ try:
   # this boolean outside of this module.
   #
   # pylint: disable=g-import-not-at-top,unused-import
-  from google.protobuf import enable_deterministic_proto_serialization
+  from .. import enable_deterministic_proto_serialization
   _python_deterministic_proto_serialization = True
 except ImportError:
   _python_deterministic_proto_serialization = False
